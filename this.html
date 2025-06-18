@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Animated Profile Circle</title>
+  <style>
+  body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #0B0621;
+  color: #F3F3F3;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5rem 10%;
+  gap: 2rem;
+  min-height: 100vh;
+  background: linear-gradient(120deg, #0B0621, #060046);
+  flex-wrap: wrap;
+}
+
+.hero-text {
+  max-width: 600px;
+}
+
+.hero-text h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.hero-text span {
+  color: #FF378D;
+}
+
+.hero-text p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #C5C6D0;
+}
+
+.buttons {
+  margin-top: 2rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 8px;
+  margin-right: 1rem;
+  transition: 0.3s ease;
+}
+
+.btn.filled {
+  background-color: #FF378D;
+  color: white;
+}
+
+.btn.filled:hover {
+  background-color: #e0317c;
+}
+
+.btn.outline {
+  border: 2px solid #FF378D;
+  color: #FF378D;
+  background-color: transparent;
+}
+
+.btn.outline:hover {
+  background-color: #FF378D;
+  color: white;
+}
+
+/* Profile Circle Section */
+.hero-photo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle-wrapper {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle-wrapper img {
+  width: 450px;
+  height: 450px;
+  border-radius: 50%;
+  z-index: 2;
+  object-fit: cover;
+  border: 5px solid #FF378D;
+}
+
+.animated-circle {
+  position: absolute;
+  width: 490px;
+  height: 490px;
+  border: 4px dashed #FF378D;
+  border-radius: 50%;
+  animation: rotateSlow 12s linear infinite;
+  z-index: 1;
+}
+
+@keyframes rotateSlow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <div class="circle-wrapper">
+    <div class="animated-circle"></div>
+    <img src="images/profile-removebg-preview (1).png" />
+  </div>
+
+</body>
+</html>

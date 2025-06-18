@@ -1,0 +1,514 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio-homepage</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <header class="main-header">
+        <a href="index.html" class="logo">Ambi-CipherDev</a>
+        <button class="toggle-navbar-btn" aria-label="Toggle navigation menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <nav class="navbar">
+            <a href="index.html" class="active">Home</a>
+            <a href="#about">About</a>
+            <a href="#projects">Project</a>
+            <a href="#skills">Skills</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <section class="hero container">
+        <div class="hero-content">
+            <h1>Hi, I'm Angelica Zomahun</h1>
+            <h3>Front-End Web Developer and UI/UX Design</h3>
+            <p>
+                A web development enthusiast crafting elegant, accessible, and purpose-driven digital experiences.
+                I focus on clean code, responsible layout and creating interfaces that feel as good as they look.
+            </p>
+            <div class="btns-box">
+                <a href="#projects" class="box1">Explore my work</a>
+                <a href="#contact">Let's Connect</a>
+            </div>
+            <div class="hero-social-icons">
+                <a href="https://www.linkedin.com/in/angelica-zomahun-477287347?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" aria-label="LinkedIn">
+                    <i class="fa-brands fa-linkedin"></i>
+                </a>
+                <a href="https://github.com/angelicazomahun" aria-label="GitHub">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="#" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+        <div class="circle-wrapper">
+            <div class="animated-circle"></div>
+            <img src="images/profile-removebg-preview (1).webp" alt="Angelica Zomahun profile" loading="lazy">
+        </div>
+    </section>
+
+    <section class="about-me container" id="about">
+        <div>
+            <img src="images/profile-removebg-preview (1).webp" alt="Angelica Zomahun profile" loading="lazy">
+        </div>
+        <div>
+            <h1>About Me</h1>
+            <p>
+                I’m Angelica Zomahun, a Front-End Web Developer and UI/UX Designer, passionate about building digital experiences that are visually stunning, intuitive, and accessible. My work blends clean, efficient code with thoughtful design to craft websites that feel as good as they look.
+                I enjoy solving problems, working in teams, and continuously improving my technical and creative abilities.
+                When I’m not coding or designing, you’ll find me exploring new tech trends, sketching wireframes, editing videos to create stories, learning graphic design, or sipping coffee while brainstorming my next project. Let’s connect to create something extraordinary that leaves a lasting impact!
+                I’m currently open to internships, freelance work, or collaboration opportunities that allow me to grow and contribute to real-world projects.
+            </p>
+        </div>
+    </section>
+
+    <section class="my-skills container" id="skills">
+        <div class="sub-main">
+            <button class="sub-title active" data-filter="skills" aria-pressed="true">Skills</button>
+            <button class="sub-title" data-filter="education" aria-pressed="false">Education</button>
+            <button class="sub-title" data-filter="experience" aria-pressed="false">Experience</button>
+            <button class="sub-title" data-filter="soft-skills" aria-pressed="false">Soft Skills</button>
+        </div>
+        <div class="sub-content">
+            <!-- Skills Cards -->
+            <div class="skills">
+                <h3>Front-End Development</h3>
+                <ul>
+                    <li>HTML</li>
+                    <li>CSS</li>
+                    <li>JavaScript</li>
+                    <li>React Basics</li>
+                </ul>
+            </div>
+            <div class="skills">
+                <h3>UI/UX Designing</h3>
+                <ul>
+                    <li>Figma</li>
+                    <li>Basic User Research</li>
+                    <li>UI Design, User Flows</li>
+                    <li>Wireframing & Prototyping</li>
+                </ul>
+            </div>
+            <div class="skills">
+                <h3>Tools & Technologies</h3>
+                <ul>
+                    <li>Visual Studio Code</li>
+                    <li>Chrome DevTools</li>
+                    <li>Adobe Creative Suite (Basics)</li>
+                    <li>Git Version Control</li>
+                </ul>
+            </div>
+            <!-- Education Cards -->
+            <div class="education hidden">
+                <h3>Designi Technology Institute</h3>
+                <ul>
+                    <li>CTVET Certification</li>
+                    <li>6 month intensive program</li>
+                    <li>Mastered HTML, CSS, JavaScript, basics of react</li>
+                </ul>
+            </div>
+            <div class="education hidden">
+                <h3>Btech Pearson Certification</h3>
+                <ul>
+                    <li>Climate change project</li>
+                    <li>Tourism project</li>
+                    <li>Skilled in UI/UX designing</li>
+                </ul>
+            </div>
+            <!-- Experience Cards -->
+            <div class="experience hidden"></div>
+            <div class="experience hidden"></div>
+            <!-- Soft Skills -->
+            <div class="soft-skills hidden">
+                <h3>Communication</h3>
+                <ul>
+                    <li>Clear client interactions</li>
+                    <li>Effective team collaboration</li>
+                    <li>Presentation of design ideas</li>
+                </ul>
+            </div>
+            <div class="soft-skills hidden">
+                <h3>Problem-Solving</h3>
+                <ul>
+                    <li>Debugging code issues</li>
+                    <li>Optimizing user flows</li>
+                    <li>Creative design solutions</li>
+                </ul>
+            </div>
+            <div class="soft-skills hidden">
+                <h3>Time Management</h3>
+                <ul>
+                    <li>Meeting project deadlines</li>
+                    <li>Prioritizing tasks</li>
+                    <li>Balancing multiple projects</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="projects container" id="projects">
+        <h2>My Projects</h2>
+        <div class="project-grid">
+            <div class="project-card">
+                <ul class="tech-list">
+                    <li>HTML</li>
+                    <li>CSS</li>
+                    <li>JavaScript</li>
+                </ul>
+                <div class="slider">
+                    <div class="slider-images">
+                        <img src="images/Home-GreenGhana Alliance - .webp" alt="Climate Change Awareness website" class="active" loading="lazy">
+                        <img src="images/Home-GreenGhana Alliance2.webp" alt="Climate Change Awareness website screenshot 2" loading="lazy">
+                        <img src="images/climate.webp" alt="Climate Change Awareness website screenshot 3" loading="lazy">
+                    </div>
+                    <button class="slider-prev" aria-label="Previous Image">❮</button>
+                    <button class="slider-next" aria-label="Next Image">❯</button>
+                    <div class="slider-dots">
+                        <span class="dot active" data-index="0"></span>
+                        <span class="dot" data-index="1"></span>
+                        <span class="dot" data-index="2"></span>
+                    </div>
+                </div>
+                <h3>Climate Change Awareness Website</h3>
+                <p>A responsive portfolio with a toggle filter, showcasing my web development skills.</p>
+                <a href="https://climatechange-sigma.vercel.app/" class="btn">View Live</a>
+            </div>
+            <div class="project-card">
+                <ul class="tech-list">
+                    <li>HTML</li>
+                    <li>CSS</li>
+                    <li>JavaScript</li>
+                </ul>
+                <div class="slider">
+                    <div class="slider-images">
+                        <img src="images/TOUR ART.webp" alt="Art in Tourism website screenshot 1" class="active" loading="lazy">
+                        <img src="images/TOUR ART2.webp" alt="Art in Tourism website screenshot 2" loading="lazy">
+                        <img src="images/TOUR ART3.webp" alt="Art in Tourism website screenshot 3" loading="lazy">
+                    </div>
+                    <button class="slider-prev" aria-label="Previous Image">❮</button>
+                    <button class="slider-next" aria-label="Next Image">❯</button>
+                    <div class="slider-dots">
+                        <span class="dot active" data-index="0"></span>
+                        <span class="dot" data-index="1"></span>
+                        <span class="dot" data-index="2"></span>
+                    </div>
+                </div>
+                <h3>Art in Tourism</h3>
+                <p>A site that showcases artworks from regions in Ghana.</p>
+                <a href="https://angelica-art-in-tourism-p.vercel.app/" class="btn">View Live</a>
+            </div>
+            <div class="project-card">
+                <ul class="tech-list">
+                    <li>Figma</li>
+                    <li>UI/UX Design</li>
+                </ul>
+                <div class="slider">
+                    <div class="slider-images">
+                        <img src="images/pro fig1.webp" alt="Tastline restaurant design screenshot 1" class="active" loading="lazy">
+                        <img src="images/pro fig 2.webp" alt="Tastline restaurant design screenshot 2" loading="lazy">
+                        <img src="images/pro fig 3.webp" alt="Tastline restaurant design screenshot 3" loading="lazy">
+                    </div>
+                    <button class="slider-prev" aria-label="Previous Image">❮</button>
+                    <button class="slider-next" aria-label="Next Image">❯</button>
+                    <div class="slider-dots">
+                        <span class="dot active" data-index="0"></span>
+                        <span class="dot" data-index="1"></span>
+                        <span class="dot" data-index="2"></span>
+                    </div>
+                </div>
+                <h3>Tastline Restaurant</h3>
+                <p>A landing page design for a restaurant.</p>
+                <a href="images/project.pdf" class="btn">View Live</a>
+            </div>
+            <div class="project-card">
+                <ul class="tech-list">
+                    <li>HTML</li>
+                    <li>CSS</li>
+                    <li>JavaScript</li>
+                </ul>
+                <div class="slider">
+                    <div class="slider-images">
+                        <img src="images/Ambi-Cipher_Home.page -.webp" alt="Ambi-Cipher Tech website screenshot 1" class="active" loading="lazy">
+                        <img src="" alt="Ambi-Cipher Tech website screenshot 2" loading="lazy">
+                        <img src="" alt="Ambi-Cipher Tech website screenshot 3" loading="lazy">
+                    </div>
+                    <button class="slider-prev" aria-label="Previous Image">❮</button>
+                    <button class="slider-next" aria-label="Next Image">❯</button>
+                    <div class="slider-dots">
+                        <span class="dot active" data-index="0"></span>
+                        <span class="dot" data-index="1"></span>
+                        <span class="dot" data-index="2"></span>
+                    </div>
+                </div>
+                <h3>Ambi-Cipher Tech</h3>
+                <p>A website for a company that helps businesses grow by creating websites, web apps, and more.</p>
+                <a href="https://ambi-cipher-techangelicazomahuu.vercel.app/" class="btn">View Live</a>
+            </div>
+            <div class="project-card">
+                <ul class="tech-list">
+                    <li>Figma</li>
+                    <li>UI</li>
+                </ul>
+                <div class="slider">
+                    <div class="slider-images">
+                        <img src="images/pro fig4.webp" alt="Art in Tourism landing page screenshot 1" class="active" loading="lazy">
+                        <img src="images/pro fig5.webp" alt="Art in Tourism landing page screenshot 2" loading="lazy">
+                        <img src="images/profig 6.webp" alt="Art in Tourism landing page screenshot 3" loading="lazy">
+                    </div>
+                    <button class="slider-prev" aria-label="Previous Image">❮</button>
+                    <button class="slider-next" aria-label="Next Image">❯</button>
+                    <div class="slider-dots">
+                        <span class="dot active" data-index="0"></span>
+                        <span class="dot" data-index="1"></span>
+                        <span class="dot" data-index="2"></span>
+                    </div>
+                </div>
+                <h3>Art in Tourism</h3>
+                <p>A landing page showcasing artworks from regions in Ghana.</p>
+                <a href="images/project3.pdf" class="btn">View Live</a>
+            </div>
+            <div class="project-card">
+                <ul class="tech-list">
+                    <li>Figma</li>
+                    <li>UI/UX Design</li>
+                </ul>
+                <div class="slider">
+                    <div class="slider-images">
+                        <img src="images/Green Ghana Tour .webp" alt="Mobile App UI Prototype screenshot 1" class="active" loading="lazy">
+                        <img src="images/Green Ghana Tour -3.webp" alt="Mobile App UI Prototype screenshot 2" loading="lazy">
+                        <img src="images/Green Ghana Tour 2.webp" alt="Mobile App UI Prototype screenshot 3" loading="lazy">
+                    </div>
+                    <button class="slider-prev" aria-label="Previous Image">❮</button>
+                    <button class="slider-next" aria-label="Next Image">❯</button>
+                    <div class="slider-dots">
+                        <span class="dot active" data-index="0"></span>
+                        <span class="dot" data-index="1"></span>
+                        <span class="dot" data-index="2"></span>
+                    </div>
+                </div>
+                <h3>Mobile App UI Prototype</h3>
+                <p>A Figma prototype for a fitness app with intuitive user flows.</p>
+                <a href="https://angelica-pearson.vercel.app/" class="btn">View Live</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="divider"></div>
+        <div class="footer-grid container">
+            <div class="footer-nav">
+                <h3>Explore</h3>
+                <nav>
+                    <ul>
+                        <li><a href="index.html" class="smooth-scroll">Home</a></li>
+                        <li><a href="#skills" class="smooth-scroll">Skills</a></li>
+                        <li><a href="#projects" class="smooth-scroll">Projects</a></li>
+                        <li><a href="#contact" class="smooth-scroll">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer-contact">
+                <h3>Connect</h3>
+                <p>Email: <a href="mailto:angelica@gmail.com">angelica@gmail.com</a></p>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/angelica-zomahun-477287347?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" aria-label="LinkedIn" class="tooltip" data-tooltip="LinkedIn">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                    <a href="https://github.com/angelicazomahun" target="_blank" aria-label="GitHub" class="tooltip" data-tooltip="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://behance.net/your-profile" target="_blank" aria-label="Behance" class="tooltip" data-tooltip="Behance">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-brand">
+                <h3>Angelica Zomahun</h3>
+                <p class="tagline">Crafting the Future of Web</p>
+                <p class="copyright">© <span id="year">2025</span> Angelica Zomahun. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggleNavbarBtnEl = document.querySelector(".toggle-navbar-btn");
+            const navbarEl = document.querySelector(".navbar");
+
+            toggleNavbarBtnEl.addEventListener("click", function () {
+                navbarEl.classList.toggle("show");
+                const isOpen = navbarEl.classList.contains("show");
+                this.innerHTML = `<i class="fa-solid ${isOpen ? 'fa-xmark' : 'fa-bars'}"></i>`;
+                this.setAttribute('aria-expanded', isOpen);
+            });
+
+            // Close navbar when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!navbarEl.contains(e.target) && !toggleNavbarBtnEl.contains(e.target) && navbarEl.classList.contains('show')) {
+                    navbarEl.classList.remove('show');
+                    toggleNavbarBtnEl.innerHTML = `<i class="fa-solid fa-bars"></i>`;
+                    toggleNavbarBtnEl.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.sub-title');
+            const cards = document.querySelectorAll('.sub-content > div');
+
+            if (!buttons.length || !cards.length) {
+                console.error('Toggle buttons or cards not found');
+                return;
+            }
+
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    buttons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.setAttribute('aria-pressed', 'false');
+                    });
+                    button.classList.add('active');
+                    button.setAttribute('aria-pressed', 'true');
+
+                    const filter = button.getAttribute('data-filter');
+                    cards.forEach(card => {
+                        card.classList.toggle('hidden', !card.classList.contains(filter));
+                    });
+                });
+
+                button.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        button.click();
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.project-card').forEach(card => {
+                const images = card.querySelectorAll('.slider-images img');
+                const dots = card.querySelectorAll('.slider-dots .dot');
+                const prevBtn = card.querySelector('.slider-prev');
+                const nextBtn = card.querySelector('.slider-next');
+                let currentIndex = 0;
+
+                function showImage(index) {
+                    images.forEach(img => img.classList.remove('active'));
+                    dots.forEach(dot => dot.classList.remove('active'));
+                    images[index].classList.add('active');
+                    dots[index].classList.add('active');
+                    currentIndex = index;
+                }
+
+                prevBtn.addEventListener('click', () => {
+                    let newIndex = currentIndex - 1;
+                    if (newIndex < 0) newIndex = images.length - 1;
+                    showImage(newIndex);
+                });
+
+                nextBtn.addEventListener('click', () => {
+                    let newIndex = currentIndex + 1;
+                    if (newIndex >= images.length) newIndex = 0;
+                    showImage(newIndex);
+                });
+
+                dots.forEach(dot => {
+                    dot.addEventListener('click', () => {
+                        const index = parseInt(dot.getAttribute('data-index'));
+                        showImage(index);
+                    });
+                });
+
+                [prevBtn, nextBtn].forEach(btn => {
+                    btn.addEventListener('keydown', e => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            btn.click();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            document.querySelectorAll('.smooth-scroll').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // Scroll animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.hero-content, .about-me, .my-skills, .projects, .footer-grid > div').forEach(el => {
+                el.classList.add('scroll-animatable');
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
